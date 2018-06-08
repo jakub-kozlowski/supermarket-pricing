@@ -1,6 +1,7 @@
 package assignment;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class PricingEngine {
     private final PriceSource priceSource;
@@ -17,7 +18,7 @@ public class PricingEngine {
 
         BigDecimal perWeightPrice = basket.getItems().stream()
                 .filter(item -> item.getPricingType() == ItemPricingType.PRICING_PER_WEIGHT)
-                .map(item -> priceSource.getPrice(item.getName()).multiply(item.getWeight()))
+                .map(item -> priceSource.getPrice(item.getName()).multiply(item.getWeight()).setScale(2, RoundingMode.UP))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return perItemPrice.add(perWeightPrice);
